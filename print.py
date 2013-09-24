@@ -24,9 +24,9 @@ THE SOFTWARE.
 
 import subprocess, sys
 
-upstream_data = open("gb2312.txt").read()
-# input_data = sys.stdin.read()
-# upstream_data = input_data.decode('utf-8').encode('gb2312')
+# upstream_data = open("gb2312.txt").read()
+input_data = sys.stdin.read()
+upstream_data = input_data.decode('utf-8').encode('gb2312')
 lpr =  subprocess.Popen(["/usr/bin/lpr", "-h"], stdin=subprocess.PIPE) 
 lpr.stdin.write(upstream_data)
 print 'print subprocess:', upstream_data
