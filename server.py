@@ -26,30 +26,14 @@ import subprocess, SimpleHTTPServer, SocketServer, os
 
 PORT = 8000
 
-def send_to_printer():
-    upstream_data = open("gb2312.txt").read()
-    lpr =  subprocess.Popen(["/usr/bin/lpr", "-h"], stdin=subprocess.PIPE)
-    lpr.stdin.write(upstream_data)
-        
 class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
-    send_print2= send_to_printer
-    
-    def send_print(self, upstream_data):
-        '''Send data to printer'''
-        # upstream_data = open("gb2312.txt").read()
-        lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        # lpr.stdin.write(upstream_data)
-        print lpr.communicate(upstream_data)
-        print "send_print:", upstream_data
-        
     def do_POST(self):
         length = int(self.headers.getheader('content-length')) 
         data_string = self.rfile.read(length)
         try:
-            # lpr = subprocess.Popen(["/usr/bin/lpr", "-h"], stdin=subprocess.PIPE)
-            # lpr.stdin.write(data_string)
-            self.send_print(data_string)
+            lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            lpr.communicate(data_string)
             result = 201
         except ValueError:
             print ValueError
@@ -65,5 +49,4 @@ def start_server():
     server.serve_forever()
 
 if __name__ == "__main__":
-    # send_to_printer()
     start_server()
