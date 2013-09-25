@@ -23,6 +23,7 @@ THE SOFTWARE.
 """
 
 import subprocess, SimpleHTTPServer, SocketServer, os
+from escpos import *
 
 PORT = 8000
 
@@ -32,6 +33,9 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         length = int(self.headers.getheader('content-length')) 
         data_string = self.rfile.read(length)
         try:
+            # print '====',data_string
+            # Epson = printer.Usb(0x1cb0,0x0003)
+            # Epson.text(data_string)
             lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             lpr.communicate(data_string)
             result = 201
