@@ -35,11 +35,3 @@ Epson = printer.Usb(0x1cb0,0x0003)
 Epson.set()
 Epson.text(upstream_data)
 
-# with tempfile.NamedTemporaryFile(delete=False) as tf:
-#     tf.write(upstream_data)
-#     tf.seek(0)
-#     lpr =  subprocess.Popen(["/usr/bin/lpr", "-h", tf.name]) 
-#     print tf.read(), tf.name
-
-# lpr =  subprocess.Popen(["/usr/bin/lpr", "-h"], stdin=subprocess.PIPE) 
-# lpr.stdin.write(upstream_data)
