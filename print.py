@@ -31,7 +31,8 @@ input_data = sys.stdin.read()
 upstream_data = input_data.decode('utf-8').encode('gb2312')
 # print 'print subprocess:', upstream_data
 
-Epson = printer.Usb(0x1cb0,0x0003)
+# Epson = printer.Usb(0x1cb0,0x0003)
+Epson = printer.Usb(0x8866,0x0100, 0, 0x82, 0x02)
 Epson.set()
 Epson.text(upstream_data)
 
