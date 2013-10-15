@@ -22,21 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import subprocess, SimpleHTTPServer, SocketServer, os
+import subprocess, SimpleHTTPServer, SocketServer, os, tempfile
 from escpos import *
 
 PORT = 8000
+keyboardhook = ''
+registerfile = tempfile.NamedTemporaryFile()
 
 class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
     def do_POST(self):
         length = int(self.headers.getheader('content-length')) 
         data_string = self.rfile.read(length)
+        
         try:
-            data_string += "\n"
-            # print '====',data_string
-            lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            lpr.communicate(data_string)
+            if self.path == '/register':
+                registerfile.seek(0)
+                registerfile.write(data_string)
+                registerfile.flush()
+            else:
+                data_string += "\n"
+                lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                lpr.communicate(data_string)
             result = 201
         except ValueError:
             print ValueError
@@ -46,6 +53,10 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(result)
 
 def start_server():
+    '''Start keyboard hook'''
+    registerfile.write("192.168.0.7")
+    keyboardhook = subprocess.Popen(["python", "keyboard-input.py", registerfile.name])
+    
     """Start the server."""
     server = SocketServer.TCPServer(("", PORT), PrinterServer)
     print "Printer serving at port", PORT

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import subprocess, sys, tempfile
+import subprocess, sys
 from escpos import *
 
 # upstream_data = open("gb2312.txt").read()
