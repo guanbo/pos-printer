@@ -22,15 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import sys, httplib, tempfile
+import sys, httplib
 from evdev import InputDevice, list_devices, ecodes, events
+from optparse import OptionParser
 
-print sys.argv
+parser = OptionParser()
+parser.add_option("-H", "--host", 
+                  action="store", dest="host", type="string", default="127.0.0.1",
+                  help="host or ip which register to listen keyboard")
+parser.add_option("-p", "--port",
+                  action="store", dest="port", default=9000,
+                  help="port on which register to listen")
+parser.add_option("-r", "--route",
+                  action="store", dest="route", type="string", default="",
+                  help="port on which register to listen")
 
-# regfile = "minisrv-register.conf"
-# if sys.argv.count >= 2:
-regfile = sys.argv[1]
-registerfile = open(regfile, "rb")
+(options, args) = parser.parse_args()
+print options
 
 devices = map(InputDevice, list_devices())
 dev = InputDevice('/dev/input/event0')
@@ -41,21 +49,17 @@ for d in devices:
         
 barcode = ''
 
-def getSlaver():
-    registerfile.seek(0)
-    print "Read stdin", registerfile.read()
-    slaver = {"host":"192.168.0.7", "port":9000, "path":"/barcode"}
-    return slaver
-     
 for event in dev.read_loop():
     if event.type == ecodes.EV_KEY:
         key_event = events.KeyEvent(event)
         if key_event.keystate == events.KeyEvent.key_up:
             if key_event.keycode == 'KEY_ENTER':
-                slaver = getSlaver()
                 print 'barcode=', barcode
-                conn = httplib.HTTPConnection(slaver["host"], slaver["port"])
-                conn.request("POST", slaver["path"], barcode)
+                try:
+                    conn = httplib.HTTPConnection(options.host, options.port)
+                    conn.request("POST", options.route, barcode)
+                except:
+                    print "Error when post barcode", "Unexpected error:", sys.exc_info()[0]
                 barcode = ''
             else:
                 barcode += str((key_event.scancode-1)%10)

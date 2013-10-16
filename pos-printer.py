@@ -22,24 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import subprocess, SimpleHTTPServer, SocketServer, os, tempfile
+import subprocess, SimpleHTTPServer, SocketServer, os.path, time
 from escpos import *
 
 PORT = 8000
-keyboardhook = ''
-registerfile = tempfile.NamedTemporaryFile()
-
 class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
+
+    keyboardhook = None
+
     def do_POST(self):
         length = int(self.headers.getheader('content-length')) 
         data_string = self.rfile.read(length)
-        
         try:
             if self.path == '/register':
-                registerfile.seek(0)
-                registerfile.write(data_string)
-                registerfile.flush()
+                if self.keyboardhook is not None and os.path.exist('/proc/'+self.keyboardhook.pid):
+                    keyboardhook.terminate()
+                print self.client_address, self.client_address[0]
+                self.keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
             else:
                 data_string += "\n"
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -53,14 +53,15 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(result)
 
 def start_server():
-    '''Start keyboard hook'''
-    registerfile.write("192.168.0.7")
-    keyboardhook = subprocess.Popen(["python", "keyboard-input.py", registerfile.name])
-    
     """Start the server."""
     server = SocketServer.TCPServer(("", PORT), PrinterServer)
-    print "Printer serving at port", PORT
-    server.serve_forever()
+    print time.asctime(), "Printer serving START at port", PORT
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    server.server_close()
+    print time.asctime(), "Printer serving STOP at port", PORT
 
 if __name__ == "__main__":
     start_server()
