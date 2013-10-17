@@ -48,3 +48,10 @@ $ sudo apt-get install avahi-daemon
 $ sudo vi /etc/hostname
 # change your hostname and save
 ```
+
+- Can't apt-get install `pyserial`
+
+```
+$ sudo apt-get install python-serial
+```
+
