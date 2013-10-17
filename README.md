@@ -19,7 +19,7 @@ Install [python-escpos](https://code.google.com/p/python-escpos/wiki/Installatio
 ```
 $ git clone https://github.com/guanbo/pos_printer
 $ cd pos_printer
-$ sudo ./server.py &
+$ sudo ./pos-printer.py &
 $ curl -X POST -d "Hello Printer" http://youIPAddress:8000
 ```
 
@@ -28,7 +28,7 @@ $ curl -X POST -d "Hello Printer" http://youIPAddress:8000
 #### Requirements
 ```
 $ sudo apt-get install python-dev
-$ sudo apt-get install linux-headers-$(uname -r)
+# sudo apt-get install linux-headers-$(uname -r)
 $ wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo python
 ```
 
@@ -36,7 +36,7 @@ $ wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | su
 ```
 $ git clone https://github.com/gvalkov/python-evdev.git
 $ cd python-evdev
-$ python setup.py install
+$ sudo python setup.py install
 ```
 
 ## Troubleshoot
