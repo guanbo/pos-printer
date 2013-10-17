@@ -38,3 +38,12 @@ $ git clone https://github.com/gvalkov/python-evdev.git
 $ cd python-evdev
 $ python setup.py install
 ```
+
+## Troubleshoot
+- How to access server by hostname`.local`
+```
+$ sudo apt-get update
+$ sudo apt-get install avahi-daemon
+$ sudo vi /etc/hostname
+# change your hostname and save
+```
