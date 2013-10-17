@@ -40,7 +40,8 @@ $ python setup.py install
 ```
 
 ## Troubleshoot
-- How to access server by hostname`.local`
+- How to access server by hostname`.local`  
+
 ```
 $ sudo apt-get update
 $ sudo apt-get install avahi-daemon
