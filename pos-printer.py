@@ -26,20 +26,21 @@ import subprocess, SimpleHTTPServer, SocketServer, os.path, time
 from escpos import *
 
 PORT = 8000
+keyboardhook = None
+
 class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
-
-    keyboardhook = None
 
     def do_POST(self):
         length = int(self.headers.getheader('content-length')) 
         data_string = self.rfile.read(length)
         try:
             if self.path == '/register':
-                if self.keyboardhook is not None and os.path.exist('/proc/'+self.keyboardhook.pid):
+                global keyboardhook
+                if keyboardhook is not None:
+                    print "keyboardhook: ", keyboardhook.pid
                     keyboardhook.terminate()
-                print self.client_address, self.client_address[0]
-                self.keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
+                keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
             else:
                 data_string += "\n"
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -49,7 +50,7 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
             print ValueError
             result = 400
         except:
-            result = 500
+            result = 500        
         self.send_response(result)
 
 def start_server():
@@ -59,6 +60,7 @@ def start_server():
     try:
         server.serve_forever()
     except KeyboardInterrupt:
+        server.socket.close()
         pass
     server.server_close()
     print time.asctime(), "Printer serving STOP at port", PORT
