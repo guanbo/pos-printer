@@ -34,7 +34,7 @@ parser.add_option("-p", "--port",
                   action="store", dest="port", default=9000,
                   help="port on which register to listen")
 parser.add_option("-r", "--route",
-                  action="store", dest="route", type="string", default="",
+                  action="store", dest="route", type="string", default="/",
                   help="port on which register to listen")
 
 (options, args) = parser.parse_args()
@@ -54,12 +54,14 @@ for event in dev.read_loop():
         key_event = events.KeyEvent(event)
         if key_event.keystate == events.KeyEvent.key_up:
             if key_event.keycode == 'KEY_ENTER':
-                print 'barcode=', barcode
+                print 'barcode=', barcode, "to ", options.host, options.port, options.route
                 try:
                     conn = httplib.HTTPConnection(options.host, options.port)
+                    conn.set_debuglevel(1)
                     conn.request("POST", options.route, barcode)
+                    conn.close()
                 except:
-                    print "Error when post barcode", "Unexpected error:", sys.exc_info()[0]
+                    print "Error when post barcode"
                 barcode = ''
             else:
                 barcode += str((key_event.scancode-1)%10)
