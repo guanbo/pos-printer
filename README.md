@@ -57,6 +57,10 @@ $ sudo apt-get install python-serial
 
 ## automatic update
 
-- `Cron` - 在后台自动执行升级工作。
-- `update-auto.sh` - 自动升级脚本
+####`Cron` - 在后台自动执行升级工作。
+
+    export VISUAL=vi
+    crontab -e 
+
+#### `update-auto.sh` - 自动升级脚本
 
