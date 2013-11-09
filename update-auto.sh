@@ -29,4 +29,6 @@ function UpdateSoftware () {
 
 if [ $DIFF_FILE_COUNT -gt 0 ]; then
 	UpdateSoftware
+else
+	echo "Already last version!"
 fi
