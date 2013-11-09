@@ -2,6 +2,7 @@
 
 # Description: Update POS Software automatic
 
+echo "Begin Update `date`"
 BASEPATH=$(dirname $0)
 cd $BASEPATH
 
@@ -32,3 +33,5 @@ if [ $DIFF_FILE_COUNT -gt 0 ]; then
 else
 	echo "Already last version!"
 fi
+
+echo "End Update `date`"
