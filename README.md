@@ -57,7 +57,8 @@ $ sudo apt-get install python-serial
 
 ## automatic update
 
-####`Cron` - 在后台自动执行升级工作。
+### cron
+call update script on schedule
 
     export VISUAL=vi
     crontab -e 
@@ -67,5 +68,6 @@ enter following code into cron file
 	*/1 * * * * cd /home/pi/deploy/pos-printer && ./update-auto.sh 2>&1 >> /home/pi/deploy/pos-update.log
 	
 
-#### `update-auto.sh` - 自动升级脚本
+### update-auto.sh
+update script
 
