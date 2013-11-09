@@ -4,7 +4,7 @@
 
 git fetch
 
-EXIT_CODE=`git diff origin/master --exit-code`
+DIFF_FILE_COUNT=`git diff --name-status master..origin/master |wc -l`
 
 #======================================
 #
@@ -15,12 +15,12 @@ EXIT_CODE=`git diff origin/master --exit-code`
 function UpdateSoftware () {
 	echo "Updating Data"
 	git merge origin/master
-	sudo sh install.sh
-	sudo service pos-printer restart
+	# sudo sh install.sh
+	# sudo service pos-printer restart
 }
 
 # $? Exit code of git diff. exit code == 0 if no different
 
-if [[ $? ]]; then
+if [[ $DIFF_FILE_COUNT ]]; then
 	UpdateSoftware
 fi
