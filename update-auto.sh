@@ -2,6 +2,9 @@
 
 # Description: Update POS Software automatic
 
+BASEPATH=$(dirname $0)
+cd $BASEPATH
+
 git fetch
 
 DIFF_FILE_COUNT=`git diff --name-status master..origin/master |wc -l`
