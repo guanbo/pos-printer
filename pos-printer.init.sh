@@ -32,7 +32,7 @@ do_start () {
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --pidfile $PIDFILE --retry 10
-		ps -ef | grep keyboard-input.py | grep -v grep | awk '{print $2}'|sudo xargs kill -9 
+    # ps -ef | grep keyboard-input.py | grep -v grep | awk '{print $2}'|sudo xargs kill -9 
     log_end_msg $?
 }
  
