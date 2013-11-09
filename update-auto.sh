@@ -16,8 +16,9 @@ function UpdateSoftware () {
 	echo "Updating $DIFF_FILE_COUNT Files "
 	git merge origin/master
 	sudo sh install.sh
-	sudo service pos-printer stop
 	sudo ps -ef | grep keyboard-input.py | grep -v grep | awk '{print $2}'|sudo xargs kill -9 
+	sleep 3
+	sudo service pos-printer stop
 	sudo service pos-printer start
 }
 
