@@ -57,6 +57,6 @@ $ sudo apt-get install python-serial
 
 ## automatic update
 
-- `Corn` - 在后台自动执行升级工作。
+- `Cron` - 在后台自动执行升级工作。
 - `update-auto.sh` - 自动升级脚本
 
