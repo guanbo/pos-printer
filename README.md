@@ -65,8 +65,8 @@ call update script on schedule
     
 enter following code into cron file
 
-	*/1 * * * * cd /home/pi/deploy/pos-printer && ./update-auto.sh 2>&1 >> /home/pi/deploy/pos-update.log
-	
+	@daily /home/pi/deploy/pos-printer/update-auto.sh 2>&1 >> /home/pi/deploy/pos-update.log
+	@yearly rm /home/pi/deploy/pos-update.log	
 
 ### update-auto.sh
 update script
