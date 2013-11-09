@@ -62,9 +62,10 @@ $ sudo apt-get install python-serial
     export VISUAL=vi
     crontab -e 
     
-将下面的代码输入
+enter following code into cron file
 
 	*/1 * * * * cd /home/pi/deploy/pos-printer && ./update-auto.sh 2>&1 >> /home/pi/deploy/pos-update.log
+	
 
 #### `update-auto.sh` - 自动升级脚本
 
