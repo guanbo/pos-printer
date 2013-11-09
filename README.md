@@ -55,3 +55,4 @@ $ sudo vi /etc/hostname
 $ sudo apt-get install python-serial
 ```
 
+## automatic update
