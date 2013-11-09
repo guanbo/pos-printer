@@ -62,4 +62,3 @@ $ sudo apt-get install python-serial
 - `update-auto.sh` - 自动升级脚本
 
 
-
