@@ -28,7 +28,7 @@ from escpos import *
 PORT = 8000
 keyboardhook = None
 
-class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class PrinterServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
 
     def do_POST(self):
@@ -56,9 +56,12 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
             result = 500        
         self.send_response(result)
 
+class ExproMiniServer(SocketServer.TCPServer):
+    allow_reuse_address = True
+    
 def start_server():
     """Start the server."""
-    server = SocketServer.TCPServer(("", PORT), PrinterServer)
+    server = ExproMiniServer(("", PORT), PrinterServerHandler)
     print time.asctime(), "Printer serving START at port", PORT
     try:
         server.serve_forever()
