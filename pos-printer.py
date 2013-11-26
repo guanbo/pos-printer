@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import subprocess, SimpleHTTPServer, SocketServer, os.path, time
+import subprocess, SimpleHTTPServer, SocketServer, os.path, time, urlparse
 from escpos import *
 
 PORT = 8000
@@ -41,6 +41,9 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     print "keyboardhook: ", keyboardhook.pid
                     keyboardhook.terminate()
                 keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
+            elif self.path == '/wifi':
+                wpa = urlparse.parse_qs(data_string)
+                subprocess.call(['sudo', './wpa.sh', wpa["ssid"][0], wpa["passphrase"][0] ])
             else:
                 data_string += "\n"
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
