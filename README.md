@@ -56,6 +56,9 @@ $ sudo apt-get install python-serial
 ```
 
 ## Update
+
+update firmware and reboot
+
 ### automatic update
 #### cron
 call update script on schedule
