@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import subprocess, SimpleHTTPServer, SocketServer, os.path, time
+import subprocess, SimpleHTTPServer, SocketServer, os.path, time, sys
 from escpos import *
 
 PORT = 8000
@@ -32,8 +32,6 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
 
     def do_POST(self):
-        length = int(self.headers.getheader('content-length')) 
-        data_string = self.rfile.read(length)
         try:
             if self.path == '/register':
                 global keyboardhook
@@ -41,17 +39,21 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     print "keyboardhook: ", keyboardhook.pid
                     keyboardhook.terminate()
                 keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
+            elif self.path == '/update':
+                subprocess.call(["./update-auto.sh"], stdout=self.wfile, stderr=self.wfile, shell=True)
             else:
+                length = int(self.headers.getheader('content-length'))
+                data_string = self.rfile.read(length)
                 data_string += "\n"
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                lpr.communicate(data_string)
-            result = 201
+                message, err = lpr.communicate(data_string)[1]
+            statusCode = 201
         except ValueError:
-            print ValueError
-            result = 400
+            print "=====",ValueError
+            statusCode = 400
         except:
-            result = 500        
-        self.send_response(result)
+            statusCode = 500 
+        self.send_response(statusCode)
 
 def start_server():
     """Start the server."""
