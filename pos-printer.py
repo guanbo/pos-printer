@@ -41,12 +41,15 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
             elif self.path == '/update':
                 subprocess.call(["/home/pi/deploy/pos-printer/update.sh"], stdout=self.wfile, stderr=self.wfile, shell=True)
+            elif self.path == '/testpage':
+                subprocess.call(["/home/pi/deploy/pos-printer/test/print-text.py"], stdout=self.wfile, stderr=self.wfile, shell=True)
             else:
                 length = int(self.headers.getheader('content-length'))
                 data_string = self.rfile.read(length)
                 data_string += "\n"
+                # subprocess.call(["./print.py"], stdin=self.rfile, stdout=self.wfile, stderr=self.wfile, shell=True)
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-                message, err = lpr.communicate(data_string)[1]
+                lpr.communicate(data_string)
             statusCode = 201
         except ValueError:
             print "=====",ValueError
