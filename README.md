@@ -68,6 +68,12 @@ enter following code into cron file
 	@daily /home/pi/deploy/pos-printer/update-auto.sh 2>&1 >> /home/pi/deploy/pos-update.log
 	@yearly rm /home/pi/deploy/pos-update.log	
 
-### update-auto.sh
-update script
-
+### manual update
+```
+$ cd path/to/pos-printer
+$ sh update.sh
+```
+### web update
+```
+$ curl -v -X POST http://exprominisrv.local:8000/update
+```
