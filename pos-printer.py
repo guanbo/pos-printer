@@ -40,7 +40,7 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     keyboardhook.terminate()
                 keyboardhook = subprocess.Popen(['python', 'keyboard-input.py', '--host', self.client_address[0]])
             elif self.path == '/update':
-                subprocess.call(["./update.sh"], stdout=self.wfile, stderr=self.wfile, shell=True)
+                subprocess.call(["/home/pi/deploy/pos-printer/update.sh"], stdout=self.wfile, stderr=self.wfile, shell=True)
             else:
                 length = int(self.headers.getheader('content-length'))
                 data_string = self.rfile.read(length)
