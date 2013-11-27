@@ -16,6 +16,8 @@ INSTALL_DIR="/usr/local/bin/pos-printer"
 mkdir -p $INSTALL_DIR
 cp *.py $INSTALL_DIR
 chmod 755 $INSTALL_DIR/*.py
+cp update.sh $INSTALL_DIR
+chmod 755 $INSTALL_DIR/*.sh
 cp adapter-printers /etc/
 
 # install startup script
