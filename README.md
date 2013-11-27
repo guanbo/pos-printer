@@ -55,9 +55,9 @@ $ sudo vi /etc/hostname
 $ sudo apt-get install python-serial
 ```
 
-## automatic update
-
-### cron
+## Update
+### automatic update
+#### cron
 call update script on schedule
 
     export VISUAL=vi
