@@ -23,17 +23,12 @@ DIFF_FILE_COUNT=`git diff --name-status master..origin/master |wc -l`
 echo $DIFF_FILE_COUNT
 
 if [ $DIFF_FILE_COUNT -gt 0 ]; then
-	sudo service pos-printer stop
-  sudo pkill python
-
 	# UpdateSoftware
 	echo "Updating $DIFF_FILE_COUNT Files "
 	git merge origin/master
 	sudo sh install.sh
-
-  # sudo ps -ef | grep keyboard-input.py | grep -v grep | awk '{print $2}'|sudo xargs kill -9 
-	sleep 10
-	sudo service pos-printer start
+  # sudo service pos-printer start
+  sudo reboot
 else
 	echo "Already last version!"
 fi
