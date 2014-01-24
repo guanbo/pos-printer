@@ -74,7 +74,7 @@ Epson = usbprinter()
 # Epson.control('lf')
 
 input_data = sys.stdin.read()
-upstream_data = input_data.decode('utf-8').encode('gb2312')
+upstream_data = input_data.decode('utf-8').encode('gb18030')
 Epson.set()
 Epson.text(upstream_data)
 

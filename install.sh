@@ -23,7 +23,7 @@ cp adapter-printers /etc/
 # install startup script
 INIT_SCRIPT_FILE="pos-printer"
 INIT_SCRIPT="/etc/init.d/"$INIT_SCRIPT_FILE
-cp pos-printer.init.sh $INIT_SCRIPT
+cp init.pos-printer.sh $INIT_SCRIPT
 chmod 755 $INIT_SCRIPT
 
 update-rc.d $INIT_SCRIPT_FILE defaults
