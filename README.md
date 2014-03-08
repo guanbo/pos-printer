@@ -22,8 +22,14 @@ $ cd pos_printer
 $ sudo ./pos-printer.py &
 $ curl -X POST -d "Hello Printer" http://youIPAddress:8000
 ```
+### Bonjour
 
-### Scaner
+```shell
+$ sudo cp extensivepromini.service /etc/avahi/services/
+$ sudo /etc/init.d/avahi-daemon restart
+```
+
+### Scaner (Deprecated)
 
 #### Requirements
 ```
