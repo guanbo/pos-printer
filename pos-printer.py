@@ -59,6 +59,8 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(statusCode)
 
 def start_server():
+    """Start Subscribe."""
+    subprocess.Popen(["python", "subscribe.py"])
     """Start the server."""
     server = SocketServer.TCPServer(("", PORT), PrinterServer)
     print time.asctime(), "Printer serving START at port", PORT
