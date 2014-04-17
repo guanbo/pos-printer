@@ -25,10 +25,10 @@ THE SOFTWARE.
 
 import redis  
 
-import os,sys  
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
-sys.path.insert(0,parentdir)
-from utils import serial
+# import os,sys  
+# parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
+# sys.path.insert(0,parentdir)
+# from utils import serial
   
 rc = redis.Redis(host='service.fankahui.com')  
   
@@ -54,5 +54,5 @@ iPhone 4S\x092\x097580.00\n\
 找零 20.00\n\
 "
 if __name__ == "__main__":
-    rc.publish(serial.getserial(), data_string)  
-    print serial.getserial()
+    rc.publish("000000007985f65b", data_string)  
+    # print serial.getserial()
