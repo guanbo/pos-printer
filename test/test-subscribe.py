@@ -24,6 +24,7 @@ THE SOFTWARE.
 """
 
 import redis  
+import time
 
 # import os,sys  
 # parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
@@ -54,5 +55,7 @@ iPhone 4S\x092\x097580.00\n\
 找零 20.00\n\
 "
 if __name__ == "__main__":
-    rc.publish("000000007985f65b", data_string)  
-    # print serial.getserial()
+    for n in range(3):
+        rc.publish("000000007985f65b", data_string+"\ntimes:"+str(n))  
+        time.sleep(5)
+        # print serial.getserial()

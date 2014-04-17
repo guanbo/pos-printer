@@ -24,22 +24,28 @@ THE SOFTWARE.
 """
 
 import redis  
+import threading
 import subprocess
 from utils import serial
+import time
 
-serial = serial.getserial()
-  
-rc = redis.Redis(host='service.fankahui.com')  
-  
-ps = rc.pubsub()  
-  
-ps.subscribe([serial])
-  
-for item in ps.listen():  
-  
-    if item['type'] == 'message':  
-  
-        print item['data']
-        lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        lpr.communicate(item['data'])
-        
+def work(item):
+    print item['channel'], ":", item['data']
+    lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    lpr.communicate(item['data'])
+
+if __name__ == "__main__":
+    r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
+    ps = r.pubsub()
+    # ps.subscribe(["000000007985f65b"])
+    ps.subscribe([serial.getserial()])
+    
+    while True:
+        item = ps.get_message()
+        if (item):
+            if item['type'] == 'message': 
+                work(item) 
+            else:
+                print time.time(), ":", item
+            
+            time.sleep(0.001)  # be nice to the system :)
