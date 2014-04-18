@@ -29,23 +29,25 @@ import subprocess
 from utils import serial
 import time
 
-def work(item):
-    print item['channel'], ":", item['data']
-    lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    lpr.communicate(item['data'])
+def message_handler(message):
+    if (message):
+        if message['type'] == 'message': 
+            print message['channel'], ":", message['data']
+            lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            lpr.communicate(message['data'])
+        else:
+            print time.time(), ":", message
+    
 
 if __name__ == "__main__":
     r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
     ps = r.pubsub()
-    # ps.subscribe(["000000007985f65b"])
-    ps.subscribe([serial.getserial()])
+    channel = serial.getserial()
+    if (channel == "ERROR000000000"):
+        channel = "000000007985f65b"
+    ps.subscribe(channel)
     
     while True:
-        item = ps.get_message()
-        if (item):
-            if item['type'] == 'message': 
-                work(item) 
-            else:
-                print time.time(), ":", item
-            
-            time.sleep(0.001)  # be nice to the system :)
+        message = ps.get_message()
+        message_handler(message)            
+        time.sleep(0.001)  # be nice to the system :)
