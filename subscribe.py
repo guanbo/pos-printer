@@ -29,6 +29,7 @@ import subprocess
 from utils import serial
 import time
 
+startup = time.time()
 def message_handler(message):
     if (message):
         if message['type'] == 'message': 
@@ -36,7 +37,8 @@ def message_handler(message):
             lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             lpr.communicate(message['data'])
         else:
-            print time.time(), ":", message
+            now = time.time()
+            print now, ":startup:", now-startup, ":", message
     
 
 if __name__ == "__main__":
@@ -48,6 +50,8 @@ if __name__ == "__main__":
     ps.subscribe(channel)
     
     while True:
-        message = ps.get_message()
-        message_handler(message)            
-        time.sleep(0.001)  # be nice to the system :)
+        # message = ps.get_message()
+        # message_handler(message)            
+        # time.sleep(0.001)  # be nice to the system :)
+        for message in ps.listen():
+            message_handler(message)
