@@ -28,6 +28,7 @@ import socket
 import fcntl
 import struct
 from datetime import *
+from utils import serial
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -44,6 +45,7 @@ data_string="\
 \x1b\x61\x00\x1b\x21\x00\n\
 --------------------------------\n\
 自检时间："+date.today().isoformat()+"\n\
+设备序列号："+serial.getserial()+"\n\
 打印机IP地址："+get_ip_address('eth0')+"\n\n\
 泛盈科技 版权所有\n\
 发布时间：2013-09-24\n\
