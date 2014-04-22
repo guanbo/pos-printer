@@ -59,6 +59,8 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(statusCode)
 
 def start_server():
+    """Self Reprot"""
+    subprocess.Popen(["python", "selfprint.py"])
     """Start Subscribe."""
     subprocess.Popen(["python", "subscribe.py"])
     """Start the server."""
