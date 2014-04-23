@@ -92,12 +92,12 @@ $ curl -v -X POST http://exprominisrv.local:8000/update
 dump all img to disk for backup
 
 ### dump image
-  $ diskutil umount /dev/disk1s1
-  $ sudo dd if=/dev/rdisk1 of=/tmp/rpi20140301.img bs=1m
-  $ diskutil umount /dev/disk1s1
+	$ diskutil umount /dev/disk1s1
+	$ sudo dd if=/dev/rdisk1 of=/tmp/rpi20140301.img bs=1m
+	$ diskutil umount /dev/disk1s1
   
 ### restore image
-  $ diskutil umount /dev/disk1s1
-  $ sudo dd of=/dev/rdisk1 if=/tmp/rpi20140301.img bs=1m
-  $ diskutil umount /dev/disk1s1
+	$ diskutil umount /dev/disk1s1
+	$ sudo dd of=/dev/rdisk1 if=/tmp/rpi20140301.img bs=1m
+	$ diskutil umount /dev/disk1s1
   
