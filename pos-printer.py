@@ -60,7 +60,7 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 def start_server():
     """Self Reprot"""
-    subprocess.Popen(["python", "selfprint.py"])
+    subprocess.call(["python", "selfprint.py"])
     """Start Subscribe."""
     subprocess.Popen(["python", "subscribe.py"])
     """Start the server."""

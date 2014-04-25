@@ -46,8 +46,8 @@ if __name__ == "__main__":
     if (channel == "ERROR000000000"):
         channel = "000000007985f65b"
 
-    r = redis.StrictRedis(host='service.fankahui.com')
-    # r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
+    # r = redis.StrictRedis(host='service.fankahui.com')
+    r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
     ps = r.pubsub()
     ps.subscribe(channel)
     
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             break
         except:
-            # print 'retry connect redis'
+            print 'Retry Connect Redis'
             try:
                 time.sleep(0.001)
                 # print 'ping', r.ping()
