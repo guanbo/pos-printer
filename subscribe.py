@@ -42,16 +42,29 @@ def message_handler(message):
     
 
 if __name__ == "__main__":
-    r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
-    ps = r.pubsub()
     channel = serial.getserial()
     if (channel == "ERROR000000000"):
         channel = "000000007985f65b"
+
+    r = redis.StrictRedis(host='service.fankahui.com')
+    # r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
+    ps = r.pubsub()
     ps.subscribe(channel)
     
     while True:
         # message = ps.get_message()
         # message_handler(message)            
         # time.sleep(0.001)  # be nice to the system :)
-        for message in ps.listen():
-            message_handler(message)
+        try:
+            for message in ps.listen():
+                message_handler(message)
+        except KeyboardInterrupt:
+            break
+        except:
+            # print 'retry connect redis'
+            try:
+                time.sleep(0.001)
+                # print 'ping', r.ping()
+                ps.subscribe(channel)
+            except:
+                pass
