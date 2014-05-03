@@ -14,7 +14,7 @@ fi
 # install program 
 INSTALL_DIR="/usr/local/bin/pos-printer"
 mkdir -p $INSTALL_DIR
-cp *.py $INSTALL_DIR
+cp *.py *.html $INSTALL_DIR
 cp -R utils $INSTALL_DIR/
 chmod -R 755 $INSTALL_DIR
 # cp update.sh $INSTALL_DIR
