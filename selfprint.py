@@ -29,6 +29,7 @@ import fcntl
 import struct
 from datetime import *
 from utils import serial
+import shelve
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -37,20 +38,45 @@ def get_ip_address(ifname):
         0x8915,  # SIOCGIFADDR
         struct.pack('256s', ifname[:15])
     )[20:24])
-    
-    
-data_string="\
+
+def print_usb_test():
+    try:
+        ip = get_ip_address('eth0')
+        data_string="\
 \n\n\
 \x1b\x61\x01\x1b\x21\x30打印机自动检测\n\
 \x1b\x61\x00\x1b\x21\x00\n\
 --------------------------------\n\
 自检时间："+date.today().isoformat()+"\n\
 设备序列号："+serial.getserial()+"\n\
-打印机IP地址："+get_ip_address('eth0')+"\n\n\
+打印机IP地址："+ip+"\n\n\
 泛盈科技 版权所有\n\
 发布时间：2013-09-24\n\
 --------------------------------\n\
-\n\n\n\n\
-"
-lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-lpr.communicate(data_string)
+\n\n\n\n"
+        lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        lpr.communicate(data_string)
+    except:
+        pass
+       
+
+def print_net_test():
+    config = shelve.open("config")
+    if config.has_key('printerip') == True:
+        print '-----',config["printerip"]
+        netdata_string = "\
+\n\n\
+\x1b\x61\x01\x1b\x21\x30打印机自动检测\n\
+\x1b\x61\x00\x1b\x21\x00\n\
+--------------------------------\n\
+自检时间："+date.today().isoformat()+"\n\
+IP地址："+config["printerip"]+"\n\n\
+泛盈科技 版权所有\n\
+--------------------------------\n\
+\n\n\n\n\x1d\x56\x00"
+        lpr2 =  subprocess.Popen(["python", "netprint.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        lpr2.communicate(netdata_string)
+    
+if __name__ == "__main__":
+    print_usb_test()
+    print_net_test()

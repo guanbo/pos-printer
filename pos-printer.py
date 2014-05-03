@@ -23,16 +23,19 @@ THE SOFTWARE.
 """
 
 import subprocess, SimpleHTTPServer, SocketServer, os.path, time, sys
+import shelve
 from escpos import *
 
 PORT = 8000
 keyboardhook = None
+configFile = shelve.open('config','c', None, True)
 
 class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
     '''Printer Server'''
 
     def do_POST(self):
         try:
+            statusCode = 201
             if self.path == '/register':
                 global keyboardhook
                 if keyboardhook is not None:
@@ -43,14 +46,21 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 subprocess.call(["/home/pi/deploy/pos-printer/update.sh"], stdout=self.wfile, stderr=self.wfile, shell=True)
             elif self.path == '/testpage':
                 subprocess.call(["/home/pi/deploy/pos-printer/test/print-text.py"], stdout=self.wfile, stderr=self.wfile, shell=True)
+            elif self.path == '/printerip':
+                length = int(self.headers.getheader('content-length'))
+                data_string = self.rfile.read(length)
+                configFile['printerip'] = data_string[3:]
+                print "/printerip: =============", configFile['printerip']
+                configFile.sync()
+                return self.send_response(200, "Setting OK")
+            elif self.path == '/selfprint':
+                subprocess.Popen(["python", "selfprint.py"])
             else:
                 length = int(self.headers.getheader('content-length'))
                 data_string = self.rfile.read(length)
                 data_string += "\n"
-                # subprocess.call(["./print.py"], stdin=self.rfile, stdout=self.wfile, stderr=self.wfile, shell=True)
                 lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
                 lpr.communicate(data_string)
-            statusCode = 201
         except ValueError:
             print "=====",ValueError
             statusCode = 400
@@ -60,7 +70,7 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 def start_server():
     """Self Reprot"""
-    subprocess.call(["python", "selfprint.py"])
+    subprocess.Popen(["python", "selfprint.py"])
     """Start Subscribe."""
     subprocess.Popen(["python", "subscribe.py"])
     """Start the server."""

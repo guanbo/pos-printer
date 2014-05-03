@@ -23,12 +23,18 @@ THE SOFTWARE.
 """
 
 import subprocess, sys, os
+import shelve
 from escpos import *
 
-Epson = printer.Network('192.168.0.74')
+config = shelve.open("config")
+if config.has_key('printerip') == False: 
+    config["printerip"] = '192.168.47.74'
+
+print 'netprint ip:', config["printerip"]
+Epson = printer.Network(config["printerip"])
 
 input_data = sys.stdin.read()
 upstream_data = input_data.decode('utf-8').encode('gb18030')
 Epson.set()
 Epson.text(upstream_data)
-Epson.cut()
+# Epson.cut()

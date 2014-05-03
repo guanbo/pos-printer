@@ -45,6 +45,8 @@ iPhone 4S\x092\x097580.00\n\
 应收 31980.90\n\
 实收 32000.90\n\
 找零 20.00\n\
+\n\n\n\n\
+\x1d\x56\x00\
 "
 
 lpr =  subprocess.Popen(["python", "netprint.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)

@@ -32,9 +32,13 @@ import time
 startup = time.time()
 def message_handler(message):
     if (message):
-        if message['type'] == 'message': 
+        if message['type'] == 'pmessage': 
             print message['channel'], ":", message['data']
-            lpr =  subprocess.Popen(["python", "print.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            cmds = ["python", "print.py"]
+            if message['channel'].endswith("#net"):
+                cmds[1] = "netprint.py"
+            
+            lpr =  subprocess.Popen(cmds, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             lpr.communicate(message['data'])
         else:
             now = time.time()
@@ -46,10 +50,12 @@ if __name__ == "__main__":
     if (channel == "ERROR000000000"):
         channel = "000000007985f65b"
 
+    channel = channel+"*"
+
     # r = redis.StrictRedis(host='service.fankahui.com')
     r = redis.StrictRedis(host='service.fankahui.com',socket_timeout=5)
     ps = r.pubsub()
-    ps.subscribe(channel)
+    ps.psubscribe(channel)
     
     while True:
         # message = ps.get_message()
@@ -65,6 +71,6 @@ if __name__ == "__main__":
             try:
                 time.sleep(0.001)
                 # print 'ping', r.ping()
-                ps.subscribe(channel)
+                ps.psubscribe(channel)
             except:
                 pass

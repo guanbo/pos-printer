@@ -1,0 +1,30 @@
+<html>
+    <header>
+        <title>Mini控制终端设置</title>
+        <meta charset="UTF-8">
+    </header>
+    <body>
+        <h1>Mini控制终端配置管理</h1>
+        <div class="container-fluid">
+        	<div class="row-fluid">
+        		<div class="span12">
+        			<form action="printerip" method="post">
+        				<fieldset>
+        					 <legend>网络打印设置</legend>
+                             <label>IP地址：</label>
+                             <input type="text" name="ip"/> 
+                             <span class="help-block">例如：192.168.0.74</span> 
+                             <button type="submit">设置</button>
+        				</fieldset>
+        			</form>
+                    <form action="selfprint" method="post" target="_blank">
+                        <fieldset>
+                             <legend>打印测试</legend>
+                             <button type="submit" class="btn">确定</button>
+                        </fieldset>
+                    </form>
+        		</div>
+        	</div>
+        </div>
+    </body>
+</html>
