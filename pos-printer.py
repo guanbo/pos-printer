@@ -58,7 +58,7 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
             elif self.path == '/pdfprint':
                 length = int(self.headers.getheader('content-length'))
                 data_string = self.rfile.read(length)
-                print data_string, 'On pdfprint =======end'
+                # print data_string, 'On pdfprint =======end'
                 lpr =  subprocess.Popen(["lpr"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
                 lpr.communicate(data_string)
             else:
