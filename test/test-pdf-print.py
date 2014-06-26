@@ -28,7 +28,7 @@ def test_pdf_print():
     """docstring for test_pdf_print"""
     with open('test.pdf') as f:
         data_string = f.read()
-        u = urllib2.urlopen('http://localhost:8000/pdfprint', data_string)
+        u = urllib2.urlopen('http://exprominisrv.local.:8000/pdfprint', data_string)
         print u.read()
     pass
     
