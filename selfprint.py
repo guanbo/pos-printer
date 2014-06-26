@@ -77,6 +77,17 @@ IP地址："+config["printerip"]+"\n\n\
         lpr2 =  subprocess.Popen(["python", "netprint.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         lpr2.communicate(netdata_string)
     
+def print_a4_test():
+    """docstring for print_a4_test"""
+    try:
+        with open('test/test.pdf') as f:
+            data_string = f.read()
+            lpr3 =  subprocess.Popen(["lpr"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            lpr3.communicate(data_string)
+    except:
+        pass
+    
 if __name__ == "__main__":
     print_usb_test()
     print_net_test()
+    # print_a4_test()

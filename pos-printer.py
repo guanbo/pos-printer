@@ -55,6 +55,12 @@ class PrinterServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 return self.send_response(200, "Setting OK")
             elif self.path == '/selfprint':
                 subprocess.Popen(["python", "selfprint.py"])
+            elif self.path == '/pdfprint':
+                length = int(self.headers.getheader('content-length'))
+                data_string = self.rfile.read(length)
+                print data_string, 'On pdfprint =======end'
+                lpr =  subprocess.Popen(["lpr"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                lpr.communicate(data_string)
             else:
                 length = int(self.headers.getheader('content-length'))
                 data_string = self.rfile.read(length)
